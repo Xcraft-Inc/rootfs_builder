@@ -93,10 +93,6 @@ func (pulledImg *PulledImage) Extract() error {
 		}
 	}
 
-	if err := os.Chown(rootfsPath, pulledImg.spec.subuid, pulledImg.spec.subuid); err != nil {
-		return err
-	}
-
 	return nil
 }
 

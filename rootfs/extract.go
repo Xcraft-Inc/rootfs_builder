@@ -31,8 +31,6 @@ func extractFile(dest string, hdr *tar.Header, tr io.Reader, subuid int, subgid 
 
 	// Get metadata from tar header
 	mode := hdr.FileInfo().Mode()
-	uid := hdr.Uid + subuid
-	gid := hdr.Gid + subgid
 
 	switch hdr.Typeflag {
 	case tar.TypeReg:
@@ -60,9 +58,6 @@ func extractFile(dest string, hdr *tar.Header, tr io.Reader, subuid int, subgid 
 		if _, err = io.Copy(currFile, tr); err != nil {
 			return err
 		}
-		if err = currFile.Chown(uid, gid); err != nil {
-			return err
-		}
 		currFile.Close()
 	case tar.TypeDir:
 		if err := os.MkdirAll(path, mode); err != nil {
@@ -70,9 +65,6 @@ func extractFile(dest string, hdr *tar.Header, tr io.Reader, subuid int, subgid 
 		}
 		// In some cases, MkdirAll doesn't change the permissions, so run Chmod
 		if err := os.Chmod(path, mode); err != nil {
-			return err
-		}
-		if err := os.Chown(path, uid, gid); err != nil {
 			return err
 		}
 
@@ -109,9 +101,6 @@ func extractFile(dest string, hdr *tar.Header, tr io.Reader, subuid int, subgid 
 			}
 		}
 		if err := os.Symlink(hdr.Linkname, path); err != nil {
-			return err
-		}
-		if err := os.Lchown(path, uid, gid); err != nil {
 			return err
 		}
 	}
