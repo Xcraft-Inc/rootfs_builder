@@ -1,3 +1,7 @@
+# FORK
+
+This fork remove the use of chown, then it's possible to extract a whole rootfs with user rights.
+
 ![Go](https://github.com/ForAllSecure/rootfs_builder/workflows/Go/badge.svg?branch=master)
 
 Rootfs Builder
